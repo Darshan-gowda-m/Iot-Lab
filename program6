@@ -1,0 +1,42 @@
+6. Arduino program to implement a temperature and humidity sensor and switch ON an L1.13 the temperature is too hot
+
+
+#include <SimpleDHT.h>
+
+int pinDHT11 = 2;                 // DHT11 data pin
+SimpleDHT11 dht(pinDHT11);       // Create sensor object
+
+void setup() {
+  pinMode(13, OUTPUT);           // LED pin
+  Serial.begin(9600);
+  Serial.println("Temperature & Humidity Monitoring");
+}
+
+void loop() {
+  byte temp = 0;
+  byte humid = 0;
+
+  int err = SimpleDHTErrSuccess;
+  if ((err = dht.read(&temp, &humid, NULL)) != SimpleDHTErrSuccess) {
+    Serial.print("Read DHT11 failed, err = ");
+    Serial.println(err);
+    delay(1000);
+    return;
+  }
+
+  Serial.print("Temperature: ");
+  Serial.print((int)temp);
+  Serial.println(" °C");
+
+  Serial.print("Humidity: ");
+  Serial.print((int)humid);
+  Serial.println(" %");
+
+  if ((int)temp > 32) {
+    digitalWrite(13, HIGH);  // Turn ON LED if temp > 32°C
+  } else {
+    digitalWrite(13, LOW);   // Otherwise, turn it OFF
+  }
+
+  delay(2000); // Wait 2 seconds before next reading
+}
