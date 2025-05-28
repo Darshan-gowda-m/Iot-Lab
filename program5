@@ -1,0 +1,26 @@
+5. Arduino program to implement a serial communication event 
+void setup() {
+  pinMode(3, OUTPUT);           // Set pin 3 as output
+  digitalWrite(3, LOW);         // Turn LED off initially
+  Serial.begin(9600);           // Start serial communication
+}
+
+void loop() {
+  if (Serial.available() > 0) {        // If data is available
+    char letter = Serial.read();       // Read one character
+
+    if (letter == '1') {
+      digitalWrite(3, HIGH);           // Turn LED ON
+      Serial.println("The LED is ON");
+    } 
+    else if (letter == '0') {
+      digitalWrite(3, LOW);            // Turn LED OFF
+      Serial.println("The LED is OFF");
+    } 
+    else {
+      Serial.println("Invalid Input"); // Not '0' or '1'
+    }
+
+    delay(200); // Short delay to prevent spamming
+  }
+}
