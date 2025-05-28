@@ -1,0 +1,42 @@
+8. Arduino program to implement an ultrasonic sensor to measure distance to an obstacle and "buzz" when too close to object.
+ const int trigPin = 9;
+const int echoPin = 8;
+const int buzzerPin = 7; // Buzzer pin
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(buzzerPin, OUTPUT); // Set buzzer pin as output
+}
+
+void loop() {
+  long duration;
+  float distance;
+
+  // Trigger the ultrasonic burst
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read the echo time
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance in cm
+  distance = (duration / 2.0) / 29.1;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // If the object is too close (<10 cm), sound the buzzer
+  if (distance < 10) {
+    digitalWrite(buzzerPin, HIGH); // Turn on buzzer
+  } else {
+    digitalWrite(buzzerPin, LOW); // Turn off buzzer
+  }
+
+  delay(200); // Small delay between readings
+}
