@@ -1,0 +1,40 @@
+. Arduino program to toggle LED by pressing a button and to implement a switch debounce circuit to prevent glitches in user input. 
+
+const int buttonPin = 7;     // Pin connected to pushbutton
+const int ledPin = 3;        // Pin connected to LED (PWM or digital)
+int ledState = LOW;          // LED state
+int buttonState;             // Current button state
+int lastButtonState = LOW;   // Previous button state
+
+unsigned long lastDebounceTime = 0;  // Time of last state change
+unsigned long debounceDelay = 50;    // Debounce time in ms
+
+void setup() {
+  pinMode(buttonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, ledState); // Ensure initial LED state
+}
+
+void loop() {
+  int reading = digitalRead(buttonPin);
+
+  // If the switch changed, due to noise or actual press
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis(); // reset the debounce timer
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    // If the button state has changed:
+    if (reading != buttonState) {
+      buttonState = reading;
+
+      // Only toggle LED if the new state is HIGH (button pressed)
+      if (buttonState == HIGH) {
+        ledState = !ledState;
+        digitalWrite(ledPin, ledState);
+      }
+    }
+  }
+
+  lastButtonState = reading;
+}
