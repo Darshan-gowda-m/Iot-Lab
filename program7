@@ -1,0 +1,41 @@
+7. Arduino program to drive a DC motor and a stepper motor. 
+#include <Stepper.h>
+
+// DC motor pins
+int motor1pin1 = 2;
+int motor1pin2 = 3;
+
+// Stepper motor setup
+const int stepsPerRevolution = 200; // adjust based on your motor
+Stepper mystepper(stepsPerRevolution, 8, 9, 10, 11); // 4-wire stepper
+
+void setup() {
+  // DC motor pins as output
+  pinMode(motor1pin1, OUTPUT);
+  pinMode(motor1pin2, OUTPUT);
+  
+  // Optional: set default stepper speed
+  mystepper.setSpeed(60); 
+}
+
+void loop() {
+  // DC motor forward
+  digitalWrite(motor1pin1, HIGH);
+  digitalWrite(motor1pin2, LOW);
+  delay(1000);
+
+  // DC motor reverse
+  digitalWrite(motor1pin1, LOW);
+  digitalWrite(motor1pin2, HIGH);
+  delay(1000);
+
+  // Read analog value from potentiometer or sensor
+  int sensorValue = analogRead(A0);
+  int motorSpeed = map(sensorValue, 0, 1023, 0, 100);
+
+  // Control stepper motor
+  if (motorSpeed > 0) {
+    mystepper.setSpeed(motorSpeed);
+    mystepper.step(stepsPerRevolution / 100); // Small step for demonstration
+  }
+}
