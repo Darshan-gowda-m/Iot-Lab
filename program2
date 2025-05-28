@@ -1,0 +1,14 @@
+3. Arduino program to vary the intensity of LED based on the reading of Light Dependent Resistor (LDR) using analogRead() and analogWrite() functions
+int intensity;  // Variable to hold the LDR value
+
+void setup() {
+  pinMode(A0, INPUT);      // LDR connected to analog pin A0
+  pinMode(9, OUTPUT);      // LED connected to PWM pin (e.g., pin 9)
+}
+
+void loop() {
+  intensity = analogRead(A0);                // Read light level (0-1023)
+  int outputValue = map(intensity, 0, 1023, 255, 0);  // Invert for brightness
+  analogWrite(9, outputValue);               // Write PWM value to LED
+  delay(100);                                // Small delay for smooth update
+}
