@@ -1,0 +1,24 @@
+#define green 13
+#define yellow 12
+#define red 11 
+
+void setup() {
+  pinMode(green, OUTPUT);   // Corrected 'output' to 'OUTPUT'
+  pinMode(yellow, OUTPUT);
+  pinMode(red, OUTPUT); 
+} 
+
+void lights(int onPin, int offPin1, int offPin2) { 
+  digitalWrite(onPin, HIGH);   // Corrected 'high' to 'HIGH'
+  digitalWrite(offPin1, LOW);  // Corrected 'low' to 'LOW'
+  digitalWrite(offPin2, LOW);
+}
+ 
+void loop() { 
+  lights(green, yellow, red);  // Turn on green, others off
+  delay(1000);
+  lights(yellow, green, red);  // Turn on yellow, others off
+  delay(1000);
+  lights(red, yellow, green);  // Turn on red, others off
+  delay(1000);
+}
