@@ -1,37 +1,36 @@
-. Arduino program to toggle LED by pressing a button and to implement a switch debounce circuit to prevent glitches in user input. 
+const int buttonPin = 2;       // Push button input pin
+const int ledPin = 13;         // LED output pin
 
-const int buttonPin = 7;     // Pin connected to pushbutton
-const int ledPin = 3;        // Pin connected to LED (PWM or digital)
-int ledState = LOW;          // LED state
-int buttonState;             // Current button state
-int lastButtonState = LOW;   // Previous button state
+int ledState = LOW;            // Current state of the LED
+int buttonState;               // Current reading from the button
+int lastButtonState = LOW;     // Previous reading from the button
 
-unsigned long lastDebounceTime = 0;  // Time of last state change
-unsigned long debounceDelay = 50;    // Debounce time in ms
+unsigned long lastDebounceTime = 0;  // Time when button state last changed
+unsigned long debounceDelay = 50;    // Debounce delay in milliseconds
 
 void setup() {
-  pinMode(buttonPin, INPUT);
+  pinMode(buttonPin, INPUT_PULLUP);  // Use internal pull-up resistor
   pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, ledState); // Ensure initial LED state
+  digitalWrite(ledPin, ledState);    // Ensure LED is off at start
 }
 
 void loop() {
   int reading = digitalRead(buttonPin);
 
-  // If the switch changed, due to noise or actual press
+  // Check if the button state has changed
   if (reading != lastButtonState) {
-    lastDebounceTime = millis(); // reset the debounce timer
+    lastDebounceTime = millis();  // Reset debounce timer
   }
 
+  // Only toggle LED if stable for debounceDelay
   if ((millis() - lastDebounceTime) > debounceDelay) {
-    // If the button state has changed:
     if (reading != buttonState) {
       buttonState = reading;
 
-      // Only toggle LED if the new state is HIGH (button pressed)
-      if (buttonState == HIGH) {
-        ledState = !ledState;
-        digitalWrite(ledPin, ledState);
+      // If button is pressed (LOW because of pull-up)
+      if (buttonState == LOW) {
+        ledState = !ledState;           // Toggle the LED state
+        digitalWrite(ledPin, ledState); // Update the LED
       }
     }
   }
