@@ -1,0 +1,40 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <DHT.h>
+
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+// Address 0x27 or 0x3F depending on your LCD module
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+  lcd.init();         // Use this instead of lcd.begin()
+  lcd.backlight();    // Turn on LCD backlight
+  dht.begin();
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+
+  lcd.clear();
+  if (isnan(temp) || isnan(hum)) {
+    lcd.setCursor(0, 0);
+    lcd.print("DHT Error");
+  } else {
+    lcd.setCursor(0, 0);
+    lcd.print("Temp: ");
+    lcd.print(temp);
+    lcd.print("C");
+
+    lcd.setCursor(0, 1);
+    lcd.print("Hum: ");
+    lcd.print(hum);
+    lcd.print("%");
+  }
+
+  delay(2000);
+}
