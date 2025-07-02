@@ -1,0 +1,35 @@
+int trigPin = 9;
+int echoPin = 8;
+int buzzerPin = 7;
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  long duration;
+  float distance;
+
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration / 2.0) / 29.1;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  if (distance < 10.0) {
+    tone(buzzerPin, 1000);  // Buzzer ON
+  } else {
+    noTone(buzzerPin);      // Buzzer OFF
+  }
+
+  delay(100);
+}
