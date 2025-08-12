@@ -6,7 +6,7 @@ void setup(){
    pinMode(yellow,OUTPUT);
    pinMode(green,OUTPUT);
 }
-void light(ibt r,int y,int g,int d)
+void light(int r,int y,int g,int d)
 {
   digitalWrite(red,r);
   digitalWrite(yellow,y);
